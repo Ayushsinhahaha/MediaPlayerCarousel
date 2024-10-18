@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "18.3.1",
     "react-native": "0.75.4",
+    "react-native-track-player": "^4.1.1-nightly-9ff32f0f5a7b4f96900bf422810d587f5d2e3789",
     "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {

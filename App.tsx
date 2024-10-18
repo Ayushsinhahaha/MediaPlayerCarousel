@@ -11,12 +11,43 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {songs} from './src/data';
 import Controller from './src/Controller';
+import TrackPlayer, {Capability} from 'react-native-track-player';
 
 const {width, height} = Dimensions.get('window');
 
 const App = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [index, setIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  function toggle() {
+    if (isPlaying) {
+      setIsPlaying(false);
+      TrackPlayer.pause();
+    } else {
+      setIsPlaying(true);
+      TrackPlayer.play();
+    }
+  }
+
+  useEffect(() => {
+    setUpTrackPlayer();
+    return () => {
+      // TrackPlayer.destroy;
+    };
+  }, []);
+
+  const setUpTrackPlayer = async () => {
+    try {
+      await TrackPlayer.setupPlayer();
+      TrackPlayer.updateOptions({
+        capabilities: [Capability.Play, Capability.Pause],
+      });
+      await TrackPlayer.add([{url: require('./assets/songs/ColdMess.mp3')}]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const slider = useRef(null);
 
@@ -72,7 +103,14 @@ const App = () => {
         <Text style={styles.titleSong}>{songs[index].title}</Text>
         <Text style={styles.title}>{songs[index].artist}</Text>
       </View>
-      <Controller onNext={goNext} onPrev={goPrev} />
+      <Controller
+        onNext={goNext}
+        onPrev={goPrev}
+        playPauseIcon={isPlaying ? 'pause-circle' : 'play'}
+        playPause={() => {
+          toggle();
+        }}
+      />
     </View>
   );
 };

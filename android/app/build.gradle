@@ -118,3 +118,7 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+task prepareKotlinBuildScriptModel {
+
+}
